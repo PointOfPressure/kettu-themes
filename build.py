@@ -6,6 +6,7 @@ import numpy as np
 from PIL import Image
 
 BASE = "https://sayer.pages.dev/themes"
+BG_VERSION = 2  # bump when the PNG changes: Android caches images by address
 OUT = os.path.dirname(os.path.abspath(__file__))
 
 PALETTE = {
@@ -118,7 +119,7 @@ def theme(p):
                 "img_guild_folder": p["accent"],
             },
         },
-        "background": {"url": f"{BASE}/crimson-fade-bg.png", "blur": 0, "alpha": 1},
+        "background": {"url": f"{BASE}/crimson-fade-bg.png?v={BG_VERSION}", "blur": 0, "alpha": 1},
     }
 
 
@@ -136,21 +137,24 @@ def rgb(h):
     return np.array([int(h[i:i + 2], 16) for i in (1, 3, 5)], dtype=np.float64)
 
 
-def background(p, w=1080, h=2400):
+def background(p, w=1080, h=2400, tilt=20):
     stops = [(0.0, p["grad_top"]), (0.30, p["grad_top"]), (0.62, p["grad_mid"]), (1.0, p["grad_bot"])]
-    y = np.linspace(0, 1, h)
-    lin = np.zeros((h, 3))
+    # gradient axis tilted from vertical: dark top-left, red bottom-right
+    th = np.radians(tilt)
+    X, Y = np.meshgrid(np.arange(w) - w / 2, np.arange(h) - h / 2)
+    d = X * np.sin(th) + Y * np.cos(th)
+    reach = abs(w / 2 * np.sin(th)) + abs(h / 2 * np.cos(th))  # corners land on 0 and 1
+    tt = (d / reach + 1) / 2
+    img = np.zeros((h, w, 3))
     for (t0, c0), (t1, c1) in zip(stops, stops[1:]):
-        m = (y >= t0) & (y <= t1)
-        t = (y[m] - t0) / (t1 - t0)
+        m = (tt >= t0) & (tt <= t1)
+        t = (tt[m] - t0) / (t1 - t0)
         t = t * t * (3 - 2 * t)  # smoothstep between stops: no visible kinks
         l0, l1 = srgb_to_lin(rgb(c0)), srgb_to_lin(rgb(c1))
-        lin[m] = l0 + (l1 - l0) * t[:, None]
-    img = np.repeat(lin[:, None, :], w, axis=1)
-    # soft glow rising from the bottom centre for depth
-    xx = (np.arange(w) - w / 2) / (w * 0.75)
-    yy = (np.arange(h) - h * 1.05) / (h * 0.45)
-    glow = np.exp(-(xx[None, :] ** 2 + yy[:, None] ** 2) * 1.6)
+        img[m] = l0 + (l1 - l0) * t[:, None]
+    # soft glow at the red end of the axis for depth
+    gx, gy = reach * 1.05 * np.sin(th), reach * 1.05 * np.cos(th)
+    glow = np.exp(-(((X - gx) / (w * 0.75)) ** 2 + ((Y - gy) / (h * 0.45)) ** 2) * 1.6)
     img = img * (1 + 0.22 * glow[:, :, None])
     s = lin_to_srgb(img)
     rng = np.random.default_rng(7)

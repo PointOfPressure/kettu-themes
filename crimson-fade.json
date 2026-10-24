@@ -280,7 +280,7 @@
     }
   },
   "background": {
-    "url": "https://sayer.pages.dev/themes/crimson-fade-bg.png",
+    "url": "https://sayer.pages.dev/themes/crimson-fade-bg.png?v=2",
     "blur": 0,
     "alpha": 1
   }
