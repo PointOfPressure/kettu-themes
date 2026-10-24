@@ -199,9 +199,6 @@
     ],
     "REDESIGN_ACTIVITY_CARD_BACKGROUND": [
       "#290303"
-    ],
-    "STATUS_DANGER": [
-      "#ff4f4f"
     ]
   },
   "rawColors": {
@@ -261,18 +258,6 @@
     "BLUE_345": "#ff5c5c",
     "BLUE_360": "#ff5c5c",
     "BLUE_400": "#ff5c5c",
-    "GREEN_360": "#3ecf6e",
-    "GREEN_400": "#3ecf6e",
-    "YELLOW_300": "#f0b232",
-    "YELLOW_360": "#f0b232",
-    "RED_345": "#ff4f4f",
-    "RED_360": "#ff4f4f",
-    "RED_400": "#ff4f4f",
-    "RED_430": "#ff4f4f",
-    "RED_460": "#a10505",
-    "RED_500": "#a10505",
-    "RED_530": "#870303",
-    "RED_560": "#870303",
     "WHITE": "#ffffff",
     "WHITE_500": "#ffffff",
     "BLACK": "#000000",
@@ -291,17 +276,11 @@
       "ic_radio_square_checked_24px__overlay": "#fff7f7",
       "ic_selection_checked_24px": "#a10505",
       "ic_selection_checked_24px__overlay": "#fff7f7",
-      "img_guild_folder": "#a10505",
-      "StatusOnline": "#3ecf6e",
-      "StatusMobileOnline": "#3ecf6e",
-      "StatusIdle": "#f0b232",
-      "StatusDND": "#ff4f4f",
-      "StatusOffline": "#c8a9a9",
-      "StatusStreaming": "#a970ff"
+      "img_guild_folder": "#a10505"
     }
   },
   "background": {
-    "url": "https://raw.githubusercontent.com/PointOfPressure/kettu-themes/main/crimson-fade-bg.png",
+    "url": "https://sayer.pages.dev/themes/crimson-fade-bg.png",
     "blur": 0,
     "alpha": 1
   }
